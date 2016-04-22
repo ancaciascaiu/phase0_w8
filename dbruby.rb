@@ -1,5 +1,5 @@
 #Reuse code from previous challenges to build a database using ruby:
-	#database attributes will be:
+	#table attributes will be:
 		#firstname,
 		#lastname, (randomly made)
 		#age(random number between 1 and 100),
@@ -8,10 +8,11 @@
 
 require 'sqlite3'
 require 'faker'
-
+#create database
 db = SQLite3::Database.new("musemembers.db")
 #db.results_as_hash = true
 
+#create table
 create_table = <<-SQL
 	CREATE TABLE IF NOT EXISTS members(
 		id INTEGER PRIMARY KEY,
@@ -29,12 +30,17 @@ def random_nr
 	Random.rand(1...100)
 end
 
+#create 150 entries
 def create_members(db, fname, lname, age, membership)
 	db.execute("INSERT INTO members(fname, lname, age, membership) VALUES (?,?,?,?)", [fname, lname, age, membership])
+	p fname.class
+end
+
+150.times do
+	create_members(db, Faker::Name.first_name, Faker::Name.last_name, random_nr, ["true", "false"].sample)
 end
 
 
-create_members(db, Faker::Name.first_name, Faker::Name.last_name, random_nr, ["true", "false"].sample)
 
 
 
