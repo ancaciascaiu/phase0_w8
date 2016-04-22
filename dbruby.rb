@@ -30,22 +30,25 @@ def random_nr
 	Random.rand(1...100)
 end
 
-#create 150 entries
+#create 150 entries and decide which name is the longest
+
+$fullname = ""
+$longestname = ""
 def create_members(db, fname, lname, age, membership)
 	db.execute("INSERT INTO members(fname, lname, age, membership) VALUES (?,?,?,?)", [fname, lname, age, membership])
-	p fname.class
+	$fullname = fname + lname
+	
+	if $longestname.length < $fullname.length
+		$longestname = $fullname
+	end
+
 end
 
 150.times do
 	create_members(db, Faker::Name.first_name, Faker::Name.last_name, random_nr, ["true", "false"].sample)
+	#p $fullname
 end
 
-
-
-
-
-
-
-
-
+puts "The longest name in our database is:#{$longestname}"
+puts "Congratulations! You won the competition!"
 
